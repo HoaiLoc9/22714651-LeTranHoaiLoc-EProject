@@ -1,90 +1,3 @@
-# services:
-#   auth:
-#     build: ./auth
-#     container_name: auth_service
-#     ports:
-#       - "3000:3000"
-#     env_file:
-#       - ./auth/.env
-#     networks:
-#       - eproject-network
-#     depends_on:
-#       - mongodb
-#       - rabbitmq
-
-#   order:
-#     build: ./order
-#     container_name: order_service
-#     ports:
-#       - "3002:3002"
-#     env_file:
-#       - ./order/.env
-#     networks:
-#       - eproject-network
-#     depends_on:
-#       - mongodb
-#       - rabbitmq
-
-#   product:
-#     build: ./product
-#     container_name: product_service
-#     ports:
-#       - "3001:3001"
-#     env_file:
-#       - ./product/.env
-#     networks:
-#       - eproject-network
-#     depends_on:
-#       - mongodb
-#       - rabbitmq
-
-#   api-gateway:
-#     build: ./api-gateway
-#     container_name: api_gateway
-#     ports:
-#       - "3003:3003"
-#     env_file:
-#       - ./api-gateway/.env
-#     networks:
-#       - eproject-network
-#     depends_on:
-#       - auth
-#       - order
-#       - product
-
-#   mongodb:
-#     image: mongo:7
-#     container_name: mongodb
-#     ports:
-#       - "27017:27017"
-#     volumes:
-#       - mongo_data:/data/db
-#     networks:
-#       - eproject-network
-
-#   rabbitmq:
-#     image: rabbitmq:3.13-management
-#     container_name: rabbitmq
-#     environment:
-#       RABBITMQ_DEFAULT_USER: admin
-#       RABBITMQ_DEFAULT_PASS: 123456
-#     ports:
-#       - "5672:5672"
-#       - "15672:15672"
-#     volumes:
-#       - rabbitmq_data:/var/lib/rabbitmq
-#       - rabbitmq_log:/var/log/rabbitmq
-#     networks:
-#       - eproject-network
-
-# networks:
-#   eproject-network:
-
-# volumes:
-#   mongo_data:
-#   rabbitmq_data:
-#   rabbitmq_log:
-
 services:
   # MongoDB
   mongodb:
@@ -154,6 +67,24 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+    networks:
+      - eproject-network
+    command: ["node", "index.js"]
+     # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    env_file:
+      - ./api-gateway/.env
+    ports:
+      - "3003:3003"
+    depends_on:
+      auth:
+        condition: service_started
+      product:
+        condition: service_started
+      order:
+        condition: service_started
     networks:
       - eproject-network
     command: ["node", "index.js"]
