@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,10 +21,34 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      # Build & push Auth Service
+      - name: Build & Push Auth Service
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./auth
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/eproject:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/auth_service:latest
+
+      # Build & push Product Service
+      - name: Build & Push Product Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./product
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/product_service:latest
+
+      # Build & push Order Service
+      - name: Build & Push Order Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./order
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/order_service:latest
+
+      # Build & push API Gateway
+      - name: Build & Push API Gateway
+        uses: docker/build-push-action@v6
+        with:
+          context: ./api-gateway
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/api_gateway:latest

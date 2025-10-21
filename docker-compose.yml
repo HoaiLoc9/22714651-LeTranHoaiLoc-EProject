@@ -30,6 +30,7 @@ services:
   auth:
     build: ./auth
     container_name: auth_service
+    image: hoailoc9/auth_service:latest
     env_file:
       - ./auth/.env
     ports:
@@ -45,6 +46,7 @@ services:
   product:
     build: ./product
     container_name: product_service
+    image: hoailoc9/product_service:latest
     env_file:
       - ./product/.env
     ports:
@@ -60,6 +62,7 @@ services:
   order:
     build: ./order
     container_name: order_service
+    image: hoailoc9/order_service:latest
     env_file:
       - ./order/.env
     ports:
@@ -74,6 +77,7 @@ services:
   api-gateway:
     build: ./api-gateway
     container_name: api_gateway
+    image: hoailoc9/api_gateway:latest
     env_file:
       - ./api-gateway/.env
     ports:
