@@ -28,6 +28,7 @@ jobs:
           context: ./auth
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/auth_service:latest
+          platforms: linux/amd64,linux/arm64
 
       # Build & push Product Service
       - name: Build & Push Product Service
@@ -36,6 +37,7 @@ jobs:
           context: ./product
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/product_service:latest
+          platforms: linux/amd64,linux/arm64
 
       # Build & push Order Service
       - name: Build & Push Order Service
@@ -44,6 +46,7 @@ jobs:
           context: ./order
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/order_service:latest
+          platforms: linux/amd64,linux/arm64
 
       # Build & push API Gateway
       - name: Build & Push API Gateway
@@ -52,3 +55,4 @@ jobs:
           context: ./api-gateway
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/api_gateway:latest
+          platforms: linux/amd64,linux/arm64
